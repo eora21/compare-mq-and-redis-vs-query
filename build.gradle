@@ -23,16 +23,41 @@ repositories {
     mavenCentral()
 }
 
+def os = org.gradle.internal.os.OperatingSystem.current()
+
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-amqp'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // ORM
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // docker compose
+    developmentOnly "org.springframework.boot:spring-boot-docker-compose"
+
+    // MySQL
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // RabbitMQ
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
+    // Redisson
+    compileOnly 'org.redisson:redisson-spring-boot-starter:3.41.0'
+
+    // Redisson logback 취약점 보안
+    runtimeOnly 'ch.qos.logback:logback-classic:1.5.15'
+    runtimeOnly 'ch.qos.logback:logback-core:1.5.15'
+
+    // Redisson netty macos 보안
+    if (os.isMacOsX()) {
+        runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.116.Final:osx-aarch_64'
+    }
 }
 
 tasks.named('test') {
