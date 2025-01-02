@@ -1,9 +1,9 @@
 services:
 
   mysql:
-    build:
-      context: ./mysql
-      dockerfile: Dockerfile
+    image: mysql:8.4.0
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
       - MYSQL_DATABASE=compare
@@ -20,5 +20,3 @@ services:
     image: redis:7.4.1
     ports:
       - 6379:6379
-
-
