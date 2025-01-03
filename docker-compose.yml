@@ -1,5 +1,18 @@
 services:
 
+  app:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+      - rabbitmq
+      - redis
+    profiles:
+      - docker
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
   mysql:
     image: mysql:8.4.0
     volumes:
