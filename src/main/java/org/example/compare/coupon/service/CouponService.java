@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CouponProviderService {
+public class CouponService {
 
     private final RabbitTemplate template;
 
