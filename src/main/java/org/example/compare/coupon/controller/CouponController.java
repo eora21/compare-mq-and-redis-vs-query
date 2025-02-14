@@ -17,6 +17,6 @@ public class CouponController {
 
     @PostMapping
     public void wantCoupon(@RequestBody CouponRequestDto couponRequestDto) {
-        couponProviderService.send(couponRequestDto);
+        couponProviderService.request(couponRequestDto);
     }
 }

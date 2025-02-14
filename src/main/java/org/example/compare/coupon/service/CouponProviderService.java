@@ -12,7 +12,7 @@ public class CouponProviderService {
 
     private final RabbitTemplate template;
 
-    public void send(CouponRequestDto request) {
+    public void request(CouponRequestDto request) {
         this.template.convertAndSend(RabbitmqConfig.QUEUE_NAME, request);
     }
 }
