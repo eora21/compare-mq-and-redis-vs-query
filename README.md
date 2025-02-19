@@ -82,7 +82,7 @@ graph LR
 - [x] MySQL 연결
 - [x] Redis 연결
 - [x] RabbitMQ 연결
-- [ ] 1,000개의 쿠폰 데이터 삽입하기
+- [x] 1,000개의 쿠폰 데이터 삽입하기
 - [x] RabbitMQ + Redis로 여러 사용자의 요청 처리
     - [x] 사용자 요청을 RabbitMQ로 전달
     - [x] RabbitMQ에서 요청을 가져옴
