@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
@@ -20,6 +21,7 @@ public class Coupon {
     @UuidGenerator
     private UUID couponCode;
 
+    @Setter
     @Column
     private Long accountId;
 }
