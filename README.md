@@ -82,15 +82,15 @@ graph LR
 - [x] MySQL 연결
 - [x] Redis 연결
 - [x] RabbitMQ 연결
-- [ ] RabbitMQ + Redis로 여러 사용자의 요청 처리
+- [ ] 1,000개의 쿠폰 데이터 삽입하기
+- [x] RabbitMQ + Redis로 여러 사용자의 요청 처리
     - [x] 사용자 요청을 RabbitMQ로 전달
     - [x] RabbitMQ에서 요청을 가져옴
         - [x] 어떻게 해야 효과적으로 RabbitMQ들의 요청들을 처리할 수 있는가? 에 대한 학습
             - concurrency
             - prefetch
-    - [ ] Redis의 쿠폰 코드를 하나씩 가져와 요청 처리
-        - [ ] Redis에 쿠폰 코드 캐싱을 위해 분산락 사용
-        - [ ] Redis와 MySQL의 정합성을 위해 분산락 사용
+    - [x] Redis의 쿠폰 코드를 하나씩 가져와 요청 처리
+        - [x] Redis에 쿠폰 코드 캐싱을 위해 분산락 사용
 - [ ] SKIP LOCKED 쿼리 실행
     - [ ] JPQL로 처리 가능한가? QueryDSL 통해 처리 가능한가? 어노테이션을 사용할 수 있는가? 등 확인하기
     - [ ] 쿼리 플랜 결과 분석
