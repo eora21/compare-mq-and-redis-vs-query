@@ -50,7 +50,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
     // Redisson
-    compileOnly 'org.redisson:redisson-spring-boot-starter:3.41.0'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.41.0'
 
     // Redisson logback 취약점 보안
     runtimeOnly 'ch.qos.logback:logback-classic:1.5.15'
