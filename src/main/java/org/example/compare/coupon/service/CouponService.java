@@ -27,13 +27,14 @@ public class CouponService {
     }
 
     public UUID getCouponId() {
-        return couponOps.getFirst();
+        return couponOps.leftPop();
     }
 
     @Transactional
     public void provide(Long accountId, UUID couponId) {
         if (Objects.isNull(couponId)) {
-            RLock lock = redissonClient.getLock("coupon");
+            RLock lock = redissonClient.getLock("coupon_insert_lock");
+            assert lock != null;
 
             try {
                 lock.tryLock(60, 5, TimeUnit.SECONDS);
@@ -41,10 +42,12 @@ public class CouponService {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } finally {
-                lock.unlock();
+                if (lock.isLocked() && lock.isHeldByCurrentThread()) {
+                    lock.unlock();
+                }
             }
 
-            couponId = couponOps.getFirst();
+            couponId = couponOps.leftPop();
         }
 
         if (Objects.isNull(couponId)) {
@@ -52,7 +55,7 @@ public class CouponService {
         }
 
         Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("유효하지 않은 쿠폰id입니다."));
 
         coupon.setAccountId(accountId);
     }
