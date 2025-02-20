@@ -47,6 +47,10 @@ public class CouponService {
             couponId = couponOps.getFirst();
         }
 
+        if (Objects.isNull(couponId)) {
+            return;
+        }
+
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow();
 
