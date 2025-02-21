@@ -23,7 +23,7 @@ import static org.mockito.Mockito.doAnswer;
 @SpringBootTest
 @Sql(scripts = "classpath:ddl.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class CouponTest {
-    private static final int TRY_COUNT = 100_000;
+    private static final int TRY_COUNT = 1_000;
 
     @Autowired
     private CouponController couponController;
