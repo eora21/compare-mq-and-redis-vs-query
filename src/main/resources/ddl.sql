@@ -7,7 +7,8 @@ use compare;
 CREATE TABLE `coupons`
 (
     `coupon_code` BINARY(16) PRIMARY KEY NOT NULL,
-    `account_id`  BIGINT                 NULL
+    `account_id`  BIGINT                 NULL,
+    INDEX idx_account_id (account_id)
 );
 
 INSERT INTO coupons (coupon_code)
