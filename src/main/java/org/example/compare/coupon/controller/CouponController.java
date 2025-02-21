@@ -20,14 +20,25 @@ public class CouponController {
     private final RabbitTemplate template;
     private final CouponService couponService;
 
-    @PostMapping
-    public void requestCoupon(@RequestBody CouponRequestDto couponRequestDto) {
+    @PostMapping("/rabbitmq-redis")
+    public void requestCouponUsingRabbitMqAndRedis(@RequestBody CouponRequestDto couponRequestDto) {
         this.template.convertAndSend(RabbitmqConfig.QUEUE_NAME, couponRequestDto.accountId());
     }
 
     @RabbitListener(queues = RabbitmqConfig.QUEUE_NAME, concurrency = "5-10")
-    public void provideCoupon(Long accountId) {
-        UUID couponId = couponService.getCouponId();
-        couponService.provide(accountId, couponId);
+    private void provideCoupon(Long accountId) {
+        UUID couponCode = couponService.getCouponCode();
+        couponService.provide(accountId, couponCode);
+    }
+
+    @PostMapping("/redis")
+    public void requestCouponUsingRedis(@RequestBody CouponRequestDto couponRequestDto) {
+        UUID couponId = couponService.getCouponCode();
+        couponService.provide(couponRequestDto.accountId(), couponId);
+    }
+
+    @PostMapping("/skip-locked")
+    public void requestCouponWithSkipLocked(@RequestBody CouponRequestDto couponRequestDto) {
+        couponService.provide(couponRequestDto.accountId());
     }
 }

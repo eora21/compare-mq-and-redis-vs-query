@@ -26,13 +26,13 @@ public class CouponService {
         this.couponOps = redisTemplate.boundListOps("coupon");
     }
 
-    public UUID getCouponId() {
+    public UUID getCouponCode() {
         return couponOps.leftPop();
     }
 
     @Transactional
-    public void provide(Long accountId, UUID couponId) {
-        if (Objects.isNull(couponId)) {
+    public void provide(Long accountId, UUID couponCode) {
+        if (Objects.isNull(couponCode)) {
             RLock lock = redissonClient.getLock("coupon_insert_lock");
             assert lock != null;
 
@@ -47,20 +47,23 @@ public class CouponService {
                 }
             }
 
-            couponId = couponOps.leftPop();
+            couponCode = couponOps.leftPop();
         }
 
-        if (Objects.isNull(couponId)) {
+        if (Objects.isNull(couponCode)) {
             return;
         }
 
-        Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new RuntimeException("유효하지 않은 쿠폰id입니다."));
-
-        coupon.setAccountId(accountId);
+        couponRepository.updateCouponAccountIdByCouponCode(couponCode, accountId);
     }
 
     private void insertCouponIdsInRedis(BoundListOperations<String, UUID> couponOps) {
+        Long size = couponOps.size();
+
+        if (Objects.nonNull(size) && size != 0) {
+            return;
+        }
+
         List<Coupon> notProvidedCoupons = couponRepository.findAllByAccountIdIsNull();
 
         if (notProvidedCoupons.isEmpty()) {
@@ -72,5 +75,13 @@ public class CouponService {
                 .toArray(UUID[]::new);
 
         couponOps.rightPushAll(notProvideCouponIds);
+    }
+
+    @Transactional
+    public void provide(Long accountId) {
+        Coupon coupon = couponRepository.findProvidableOneWithSkipLocked()
+                .orElseThrow();
+
+        coupon.setAccountId(accountId);
     }
 }
